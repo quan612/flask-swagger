@@ -1,0 +1,292 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "description": "Test flask swagger",
+    "version": "1.0.0",
+    "title": "Test Flask"
+  },
+  "paths": {
+    "/patient/": {
+      "get": {
+        "operationId": "app.api.patient.routes.get_patients",
+        "tags": ["Patient Controller"],
+        "summary": "Get the entire list of patients",
+        "description": "Get the list of patients",
+        "responses": {
+          "200": {
+            "description": "Return list of patients",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Patient"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/patient/create-patient": {
+      "post": {
+        "operationId": "app.api.patient.routes.create_patient",
+        "tags": ["Patient Controller"],
+        "summary": "Create a new patient",
+        "description": "Create a new patient",
+        "requestBody": {
+          "description": "newPatientRequest",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patient"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Patient created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "integer" },
+                    "age": { "type": "integer" },
+                    "sex": { "type": "string" },
+                    "ethnicity": { "type": "string" }
+                  },
+                  "example": {
+                    "id": 1,
+                    "age": 22,
+                    "sex": "Male",
+                    "ethnicity": "Asian"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Patient created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "integer" },
+                    "age": { "type": "integer" },
+                    "sex": { "type": "string" },
+                    "ethnicity": { "type": "string" }
+                  },
+                  "example": {
+                    "id": 1,
+                    "age": 22,
+                    "sex": "Male",
+                    "ethnicity": "Asian"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/patient/enter-points": {
+      "post": {
+        "operationId": "app.api.patient.routes.enter_points",
+        "tags": ["Patient Controller"],
+        "summary": "Patient coordinates",
+        "description": "Patient coordinates",
+        "requestBody": {
+          "description": "newPatientPointRequest",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "patientId": { "type": "integer" },
+                  "pointName": { "type": "string" },
+                  "location": {
+                    "type": "object",
+                    "properties": {
+                      "x": { "type": "integer" },
+                      "y": { "type": "integer" },
+                      "z": { "type": "integer" }
+                    }
+                  }
+                },
+                "example": {
+                  "patientId": 1,
+                  "pointName": "Endocanthi",
+                  "location": {
+                    "x": 14,
+                    "y": 22,
+                    "z": 5
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "New patient point created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "patientId": { "type": "integer" },
+                    "pointName": { "type": "string" },
+                    "coordinate": { "type": "string" }
+                  },
+                  "example": {
+                    "patientId": 4,
+                    "pointName": "Endocanthi",
+                    "coordinate": "14, 22, 5"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/patient/compare-average/{patientId}/{pointName}/": {
+      "get": {
+        "operationId": "app.api.patient.routes.compare_average",
+        "tags": ["Patient Controller"],
+        "summary": "Takes the average points of everyone in the ethnicity and Sex",
+        "description": "Average Points of people",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "patientId",
+            "description": "Patient Id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 3
+            }
+          },
+          {
+            "in": "path",
+            "name": "pointName",
+            "description": "Name of point for comparison",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Endocanthi",
+                "Exocanthi",
+                "Alar base",
+                "Chellion",
+                "Zygion",
+                "Infraorbital Margin",
+                "Supraorbital Notch",
+                "Labiale Inferius",
+                "Labiale Superius",
+                "Subnasale",
+                "Supratip",
+                "Glabella"
+              ],
+              "example": "Endocanthi"
+            }
+          },
+          {
+            "in": "query",
+            "name": "comparison",
+            "description": "Array of comparison conditions",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["Sex", "Ethnicity"],
+                "example": ["Sex", "Ethnicity"]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comparison result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "key": { "type": "string" },
+                    "message": { "type": "string" }
+                  },
+                  "example": {
+                    "key": "-15, 2, 5",
+                    "message": "Your Zygion is 15mm to the left horizontally, 2 mm higher vertically, and 5 mm lower in depth compared to the average"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Patient": {
+        "type": "object",
+        "required": ["name", "sex", "ethnicity"],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "age": {
+            "type": "integer"
+          },
+          "sex": {
+            "type": "string"
+          },
+          "ethnicity": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "name": "Quan",
+          "age": 22,
+          "sex": "Male",
+          "ethnicity": "Asian"
+        }
+      },
+      "Point": {
+        "type": "object",
+        "required": [
+          "patientId",
+          "name",
+          "coordinateX",
+          "coordinateY",
+          "coordinateZ"
+        ],
+        "properties": {
+          "patientId": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "coordinateX": {
+            "type": "integer"
+          },
+          "coordinateY": {
+            "type": "integer"
+          },
+          "coordinateZ": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}

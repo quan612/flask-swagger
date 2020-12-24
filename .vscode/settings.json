@@ -1,0 +1,12 @@
+{
+  "python.pythonPath": "C:\\Users\\Azure\\.virtualenvs\\flask-swagger-X8lWZ-CN\\Scripts\\python.exe",
+  "cSpell.words": ["endocanthi", "ethinicities", "jsonify", "openapi"],
+  "python.linting.flake8Enabled": true,
+  "python.linting.enabled": true,
+  "python.formatting.provider": "autopep8",
+  "python.formatting.autopep8Args": [
+    "--max-line-length",
+    "78",
+    "--experimental"
+  ]
+}
